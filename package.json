@@ -1,0 +1,40 @@
+{
+  "name": "doctorwhoapi",
+  "version": "1.0.0",
+  "description": "A simple NodeJS + Express.js RESTful API serving data about Doctor Who.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon --trace-warnings server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joaodath/doctorwhoapi.git"
+  },
+  "keywords": [
+    "doctor",
+    "who",
+    "restful",
+    "api",
+    "nodejs",
+    "api",
+    "doctor",
+    "who",
+    "api"
+  ],
+  "author": "Joao Rodrigues @joaodath",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/joaodath/doctorwhoapi/issues"
+  },
+  "homepage": "https://github.com/joaodath/doctorwhoapi#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongodb": "^4.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
