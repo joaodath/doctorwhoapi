@@ -1,4 +1,4 @@
-const { client, charactersCOL, dbconnect, dbclose, ObjectId } = require('../database/database')
+const { charactersCOL, dbconnect, dbclose, ObjectId } = require('../database/database')
 
 const getAll = async (req, res) => {
     try {
@@ -29,16 +29,29 @@ const getById = async (req, res) => {
 
 const updateCharacter = async (req, res) => {
     const { id } = req.params;
+    const characterPut = req.body;
 
     try {
         await dbconnect()
-        
-        await charactersCOL.findOneAndUpdate({_id: ObjectId(id)}, characterPut);
 
-        const characterUpdated = await charactersCOL.findOne({_id: ObjectId(id)});
+        const filterQuery = {_id: ObjectId(id)};
+        const updateObject = { $set: characterPut };
+        const updateOptions = { upsert: true }
+       
+        const characterUpdating = await charactersCOL.findOneAndUpdate(filterQuery, updateObject, updateOptions);
+
+        const characterUpdated = await charactersCOL.findOne(filterQuery);
+
         await dbclose();
 
-        return res.json(characterUpdated);
+        characterUpdating.lastErrorObject.updatedExisting ? res.json(characterUpdated) : res.status(500).json({"error": "failed to update object. TARDIS data core overheated. try again later."});
+
+        if (characterUpdating.lastErrorObject.updatedExisting) {
+            res.json(characterUpdated)
+        } else if (!characterUpdating.lastErrorObject.updatedExisting && characterUpdating.value) {
+            res.status(201).json(characterUpdated)
+        }
+
     } catch(err) {
         console.error(`Error when doing updateCharacter. Error: ${err}`);
         return res.status(500).send({"error": "it appears the TARDIS has no energy now and entered safe mode. try again later."});
@@ -46,16 +59,44 @@ const updateCharacter = async (req, res) => {
 }
 
 const createCharacter = async (req, res) => {
-    const characterToCreate = req.body;
-    try{
+    const characterToCreate = res.locals.character;
+    console.log(`res.locals.character in createCharacter: ${res.locals.character}`)
+    try {
         await dbconnect();
+        
         result = await charactersCOL.insertOne(characterToCreate);
         let characterCreated = await charactersCOL.findOne({_id: ObjectId(result.insertedId)});
-
+        
         await dbclose()
+
+        result.acknowledged ? res.status(201).json(characterCreated) : res.status(500).json({"error": "the data core is overheated. try again later."})
     } catch(err) {
-        console.error(`Error occured when trying createCharacter`);
+        console.error(`Error occured when trying createCharacter.
+        Error: ${err}`);
         return res.status(500).json({"error": "the TARDIS data core is not responding. try again later."});
+    }
+}
+
+const deleteCharacter = async (req, res) => {
+    const {id} = req.params;
+
+    try {
+        await dbconnect();
+
+        let deleteResult = await charactersCOL.deleteOne({ _id: ObjectId(id) });
+
+        await dbclose();
+
+        deleteResult.deletedCount === 1
+            ? res.status(204).send()
+            : res.status(500).json({
+                "error": "could not delete the character now. try again later.",
+            });
+
+    } catch(err) {
+        console.error(`Error when trying deleteCharacter.
+        Error: ${err}`);
+        res.status(500).json({"error": "the TARDIS data core is not responding. try again later."});
     }
 }
 
@@ -63,5 +104,6 @@ module.exports = {
     getAll,
     getById,
     updateCharacter,
-    createCharacter
+    createCharacter,
+    deleteCharacter
 }
