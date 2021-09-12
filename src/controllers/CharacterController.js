@@ -20,7 +20,11 @@ const getById = async (req, res) => {
         await dbconnect();
         const characterFound = await charactersCOL.findOne({_id: ObjectId(id)});
         await dbclose();
-        return res.send(characterFound);
+        if (!characterFound) {
+            return res.status(404).json({"error": "character not found inside the TARDIS data core."});
+        } else {
+            return res.send(characterFound);
+        };
     } catch(err) {
         console.error(`Error when doing getById_Character. Error: ${err}`);
         return res.status(500).send({"error": "it seems the TARDIS is running empty on fuel. we'll recharge over Cardiff's rift. try again later."});
