@@ -28,7 +28,7 @@ const checkID = async (req, res, next) => {
 const checkEmptyInput = (req, res, next) => {
     const characterCreate = req.body;
     
-    if (!characterCreate || !characterCreate.name || !characterCreate.regenerationCount || !characterCreate.species || !characterCreate.bio || !characterCreate.birthDate || !characterCreate.deathDate || !characterCreate.spouse || !characterCreate.spouse || !characterCreate.firstMentioned || !characterCreate.firstAppearance || !characterCreate.lastAppearance || !characterCreate.allAppearances || !characterCreate.actorOrActress || !characterCreate.tardisDataCoreURI || !characterCreate.imgURI) {
+    if (!characterCreate || !characterCreate.name || !characterCreate.regenerationCount || !characterCreate.species || !characterCreate.bio || !characterCreate.birthDate || !characterCreate.deathDate || !characterCreate.spouse || !characterCreate.firstMentioned || !characterCreate.firstAppearance || !characterCreate.lastAppearance || !characterCreate.allAppearances || !characterCreate.actorOrActress || !characterCreate.tardisDataCoreURI || !characterCreate.imgURI) {
         res.status(400).json({error: `all fields are required to save a new object to TARDIS data core! refer to documentation.`});
         return;
     }
