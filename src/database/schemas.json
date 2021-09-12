@@ -1,0 +1,39 @@
+{
+    "characters": {
+        "name": "String",
+        "regenerationCount": "int",
+        "species":"String",
+        "bio": "String",
+        "birthDate": "int/String/Date",
+        "deathDate": "int/String/Date",
+        "spouse": "String",
+        "firstMentioned": "String",
+        "firstAppearance": "String",
+        "lastAppearance": "String",
+        "allAppearances": "[StringArray]",
+        "actorOrActress": "String",
+        "tardisDataCoreURI": "String",
+        "imgURI": "String"   
+    },
+    "species": {
+        "name": "String",
+        "planet": "String",
+        "firstMentioned": "String",
+        "firstAppearance": "String",
+        "lastAppearance": "String",
+        "allAppearances": "[StringArray]",
+        "bio": "String",
+        "biologicalType": "String",
+        "tardisDataCoreURI": "String",
+        "imgURI": "String"   
+    },
+    "seriesEpisodes": {
+        "season": "int",
+        "number": "int",
+        "shorthand": "String // S01E01",
+        "bio": "String",
+        "firstRelease": "String/Date",
+        "tardisDataCoreURI": "String",
+        "imgURI": "String"   
+    }
+}
