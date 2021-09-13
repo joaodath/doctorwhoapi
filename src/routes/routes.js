@@ -33,6 +33,8 @@ router.put("/episodes/:id", EpisodesMiddleware.checkID, EpisodesController.updat
 
 router.delete("/episodes/:id", EpisodesMiddleware.checkID, EpisodesController.deleteEpisode);
 
+router.get("/filterepisodes", EpisodesController.filterAllEpisodes);
+
 //species routes
 router.get("/species", SpeciesController.getAll)
 

@@ -107,10 +107,52 @@ const deleteEpisode = async (req, res) => {
     }
 }
 
+const filterAllEpisodes = async (req, res) => {
+    let {
+        name,
+        season,
+        number,
+        shorthand,
+        bio,
+        firstRelease
+    } = req.query;
+
+    !name ? name = "" : name = name;
+    !season ? season = "" : season = season;
+    !number ? number = "" : number = number;
+    !shorthand ? shorthand = "" : shorthand = shorthand;
+    !bio ? bio = "" : bio = bio;
+    !firstRelease ? firstRelease = "" : firstRelease = firstRelease;
+
+    try {
+        await dbconnect();
+        let episodes = await episodesCOL.find({
+            name: { $regex: name, $options: 'i' },
+            season: { $regex: season, $options: 'i' },
+            number: { $regex: number, $options: 'i' },
+            shorthand: { $regex: shorthand, $options: 'i' },
+            bio: { $regex: bio, $options: 'i' },
+            firstRelease: { $regex: firstRelease, $options: 'i' }
+        });
+        let episodesArr = await episodes.toArray();
+        await dbclose();
+
+        if (episodesArr.length === 0) {
+            return res.status(404).json({"error": "no episodes found."});
+        } else {
+            return res.send(episodesArr);
+        };
+    } catch(err) {
+        console.error(`Error when doing filterAllEpisodes. Error: ${err}`);
+        return res.status(500).send({"error": "it seems the TARDIS is running empty on fuel. we'll recharge over Cardiff's rift. try again later."});
+    }
+}
+
 module.exports = {
     getAll,
     getById,
     updateEpisode,
     createEpisode,
-    deleteEpisode
+    deleteEpisode,
+    filterAllEpisodes
 }
