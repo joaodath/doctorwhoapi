@@ -28,7 +28,7 @@ const checkID = async (req, res, next) => {
 const checkEmptyInput = (req, res, next) => {
     const episodeCreate = req.body;
     
-    if (!episodeCreate || !episodeCreate.planet || !episodeCreate.firstMentioned || !episodeCreate.firstAppearance || !episodeCreate.lastAppearance || !episodeCreate.allAppearances || !episodeCreate.bio || !episodeCreate.biologicalType || !episodeCreate.tardisDataCoreURI || !episodeCreate.imgURI) {
+    if (!episodeCreate || !episodeCreate.name || !episodeCreate.season || !episodeCreate.number || !episodeCreate.shorthand || !episodeCreate.bio || !episodeCreate.firstRelease || !episodeCreate.tardisDataCoreURI || !episodeCreate.imgURI) {
         res.status(400).json({error: `all fields are required to save a new object to TARDIS data core! refer to documentation.`});
         return;
     }
@@ -40,13 +40,11 @@ const sanitizeInput = async (req, res, next) => {
     const incomingObject = req.body;
     const sanitizedObject = {
         'name': incomingObject.name,
-        'planet': incomingObject.planet,
-        'firstMentioned': incomingObject.firstMentioned,
-        'firstAppearance': incomingObject.firstAppearance,
-        'lastAppearance': incomingObject.lastAppearance,
-        'allAppearances': incomingObject.allAppearances,
+        'season': incomingObject.season,
+        'number': incomingObject.number,
+        'shorthand': incomingObject.shorthand,
         'bio': incomingObject.bio,
-        'biologicalType': incomingObject.biologicalType,
+        'firstRelease': incomingObject.firstRelease,
         'tardisDataCoreURI': incomingObject.tardisDataCoreURI,
         'imgURI': incomingObject.imgURI  
     }
