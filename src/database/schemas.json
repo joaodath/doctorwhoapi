@@ -28,6 +28,7 @@
         "imgURI": "String"   
     },
     "seriesEpisodes": {
+        "name": "String",
         "season": "int",
         "number": "int",
         "shorthand": "String // S01E01",
