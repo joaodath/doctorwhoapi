@@ -6,6 +6,9 @@ const CharacterMiddleware = require("../middlewares/CharacterMiddlewares");
 const EpisodesController = require("../controllers/EpisodesController");
 const EpisodesMiddleware = require("../middlewares/EpisodesMiddlewares");
 
+const SpeciesController = require("../controllers/SpeciesController");
+const SpeciesMiddleware = require("../middlewares/SpeciesMiddlewares");
+
 //characters routes
 router.get("/characters", CharacterController.getAll);
 
@@ -27,5 +30,16 @@ router.post("/episodes", EpisodesMiddleware.checkEmptyInput, EpisodesMiddleware.
 router.put("/episodes/:id", EpisodesMiddleware.checkID, EpisodesController.updateEpisode);
 
 router.delete("/episodes/:id", EpisodesMiddleware.checkID, EpisodesController.deleteEpisode);
+
+//species routes
+router.get("/species", SpeciesController.getAll)
+
+router.get("/species/:id", SpeciesController.getById);
+
+router.post("/species", SpeciesMiddleware.checkEmptyInput, SpeciesMiddleware.sanitizeInput, SpeciesController.createSpecie);
+
+router.put("/species/:id", SpeciesMiddleware.checkID, SpeciesController.updateSpecie);
+
+router.delete("/species/:id", SpeciesMiddleware.checkID, SpeciesController.deleteSpecie);
 
 module.exports = router;

@@ -22,7 +22,7 @@ const getById = async (req, res) => {
         await dbclose();
 
         if (!episodeFound) {
-            return res.status(404).json({"error": "character not found inside the TARDIS data core."});
+            return res.status(404).json({"error": "episode not found inside the TARDIS data core."});
         } else {
             return res.send(episodeFound);
         };
@@ -66,17 +66,17 @@ const updateEpisode = async (req, res) => {
 }
 
 const createEpisode = async (req, res) => {
-    const characterToCreate = res.locals.episode;
+    const episodeToCreate = res.locals.episode;
     console.log(`res.locals.episode in createEpisode: ${res.locals.episode}`)
     try {
         await dbconnect();
         
-        result = await episodesCOL.insertOne(characterToCreate);
-        let characterCreated = await episodesCOL.findOne({_id: ObjectId(result.insertedId)});
+        result = await episodesCOL.insertOne(episodeToCreate);
+        let episodeCreated = await episodesCOL.findOne({_id: ObjectId(result.insertedId)});
         
         await dbclose()
 
-        result.acknowledged ? res.status(201).json(characterCreated) : res.status(500).json({"error": "the data core is overheated. try again later."})
+        result.acknowledged ? res.status(201).json(episodeCreated) : res.status(500).json({"error": "the data core is overheated. try again later."})
     } catch(err) {
         console.error(`Error occured when trying createEpisode.
         Error: ${err}`);
@@ -97,7 +97,7 @@ const deleteEpisode = async (req, res) => {
         deleteResult.deletedCount === 1
             ? res.status(204).send()
             : res.status(500).json({
-                "error": "could not delete the character now. try again later.",
+                "error": "could not delete the episode now. try again later.",
             });
 
     } catch(err) {
