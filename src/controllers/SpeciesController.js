@@ -1,161 +1,215 @@
-const { speciesCOL, dbconnect, dbclose, ObjectId } = require('../database/database')
+const {
+  speciesCOL,
+  dbconnect,
+  dbclose,
+  ObjectId,
+} = require("../database/database");
 
 const getAll = async (req, res) => {
-    try {
-        await dbconnect();
-        let species = speciesCOL.find({});
-        let speciesArr = await species.toArray();
-        await dbclose();
-        return res.json(speciesArr);
-    } catch(err) {
-        console.log(`Error when doing getAll. Error: ${err}`)
-        return res.status(500).send({"error": "it seems the TARDIS telepathic circuits are overloaded right now. try again later."});
-    }
-}
+  try {
+    await dbconnect();
+    let species = speciesCOL.find({});
+    let speciesArr = await species.toArray();
+    await dbclose();
+    return res.json(speciesArr);
+  } catch (err) {
+    console.log(`Error when doing getAll. Error: ${err}`);
+    return res
+      .status(500)
+      .send({
+        error:
+          "it seems the TARDIS telepathic circuits are overloaded right now. try again later.",
+      });
+  }
+};
 
 const getById = async (req, res) => {
-    const { id } = req.params;
-    
-    try {
-        await dbconnect();
-        const specieFound = await speciesCOL.findOne({_id: ObjectId(id)});
-        await dbclose();
+  const { id } = req.params;
 
-        if (!specieFound) {
-            return res.status(404).json({"error": "specie not found inside the TARDIS data core."});
-        } else {
-            return res.send(specieFound);
-        };
+  try {
+    await dbconnect();
+    const specieFound = await speciesCOL.findOne({ _id: ObjectId(id) });
+    await dbclose();
 
-    } catch(err) {
-        console.error(`Error when doing getById_Specie. 
-        Error: ${err}`);
-        return res.status(500).send({"error": "it seems the TARDIS is running empty on fuel. we'll recharge over Cardiff's rift. try again later."});
+    if (!specieFound) {
+      return res
+        .status(404)
+        .json({ error: "specie not found inside the TARDIS data core." });
+    } else {
+      return res.send(specieFound);
     }
-}
+  } catch (err) {
+    console.error(`Error when doing getById_Specie. 
+        Error: ${err}`);
+    return res
+      .status(500)
+      .send({
+        error:
+          "it seems the TARDIS is running empty on fuel. we'll recharge over Cardiff's rift. try again later.",
+      });
+  }
+};
 
 const updateSpecie = async (req, res) => {
-    const { id } = req.params;
-    const speciePut = req.body;
+  const { id } = req.params;
+  const speciePut = req.body;
 
-    try {
-        await dbconnect()
+  try {
+    await dbconnect();
 
-        const filterQuery = {_id: ObjectId(id)};
-        const updateObject = { $set: speciePut };
-        const updateOptions = { upsert: true }
-       
-        const specieUpdating = await speciesCOL.findOneAndUpdate(filterQuery, updateObject, updateOptions);
+    const filterQuery = { _id: ObjectId(id) };
+    const updateObject = { $set: speciePut };
+    const updateOptions = { upsert: true };
 
-        const specieUpdated = await speciesCOL.findOne(filterQuery);
+    const specieUpdating = await speciesCOL.findOneAndUpdate(
+      filterQuery,
+      updateObject,
+      updateOptions
+    );
 
-        await dbclose();
+    const specieUpdated = await speciesCOL.findOne(filterQuery);
 
-        specieUpdating.lastErrorObject.updatedExisting ? res.json(specieUpdated) : res.status(500).json({"error": "failed to update object. TARDIS data core overheated. try again later."});
+    await dbclose();
 
-        if (specieUpdating.lastErrorObject.updatedExisting) {
-            res.json(specieUpdated)
-        } else if (!specieUpdating.lastErrorObject.updatedExisting && specieUpdating.value) {
-            res.status(201).json(specieUpdated)
-        }
+    specieUpdating.lastErrorObject.updatedExisting
+      ? res.json(specieUpdated)
+      : res
+          .status(500)
+          .json({
+            error:
+              "failed to update object. TARDIS data core overheated. try again later.",
+          });
 
-    } catch(err) {
-        console.error(`Error when doing updateSpecie. Error: ${err}`);
-        return res.status(500).send({"error": "it appears the TARDIS has no energy now and entered safe mode. try again later."});
+    if (specieUpdating.lastErrorObject.updatedExisting) {
+      res.json(specieUpdated);
+    } else if (
+      !specieUpdating.lastErrorObject.updatedExisting &&
+      specieUpdating.value
+    ) {
+      res.status(201).json(specieUpdated);
     }
-}
+  } catch (err) {
+    console.error(`Error when doing updateSpecie. Error: ${err}`);
+    return res
+      .status(500)
+      .send({
+        error:
+          "it appears the TARDIS has no energy now and entered safe mode. try again later.",
+      });
+  }
+};
 
 const createSpecie = async (req, res) => {
-    const specieToCreate = res.locals.specie;
-    console.log(`res.locals.specie in createSpecie: ${res.locals.specie}`)
-    try {
-        await dbconnect();
-        
-        result = await speciesCOL.insertOne(specieToCreate);
-        let specieCreated = await speciesCOL.findOne({_id: ObjectId(result.insertedId)});
-        
-        await dbclose()
+  const specieToCreate = res.locals.specie;
+  console.log(`res.locals.specie in createSpecie: ${res.locals.specie}`);
+  try {
+    await dbconnect();
 
-        result.acknowledged ? res.status(201).json(specieCreated) : res.status(500).json({"error": "the data core is overheated. try again later."})
-    } catch(err) {
-        console.error(`Error occured when trying createSpecie.
+    result = await speciesCOL.insertOne(specieToCreate);
+    let specieCreated = await speciesCOL.findOne({
+      _id: ObjectId(result.insertedId),
+    });
+
+    await dbclose();
+
+    result.acknowledged
+      ? res.status(201).json(specieCreated)
+      : res
+          .status(500)
+          .json({ error: "the data core is overheated. try again later." });
+  } catch (err) {
+    console.error(`Error occured when trying createSpecie.
         Error: ${err}`);
-        return res.status(500).json({"error": "the TARDIS data core is not responding. try again later."});
-    }
-}
+    return res
+      .status(500)
+      .json({
+        error: "the TARDIS data core is not responding. try again later.",
+      });
+  }
+};
 
 const deleteSpecie = async (req, res) => {
-    const {id} = req.params;
+  const { id } = req.params;
 
-    try {
-        await dbconnect();
+  try {
+    await dbconnect();
 
-        let deleteResult = await speciesCOL.deleteOne({ _id: ObjectId(id) });
+    let deleteResult = await speciesCOL.deleteOne({ _id: ObjectId(id) });
 
-        await dbclose();
+    await dbclose();
 
-        deleteResult.deletedCount === 1
-            ? res.status(204).send()
-            : res.status(500).json({
-                "error": "could not delete the specie now. try again later.",
-            });
-
-    } catch(err) {
-        console.error(`Error when trying deleteSpecie.
+    deleteResult.deletedCount === 1
+      ? res.status(204).send()
+      : res.status(500).json({
+          error: "could not delete the specie now. try again later.",
+        });
+  } catch (err) {
+    console.error(`Error when trying deleteSpecie.
         Error: ${err}`);
-        res.status(500).json({"error": "the TARDIS data core is not responding. try again later."});
-    }
-}
+    res
+      .status(500)
+      .json({
+        error: "the TARDIS data core is not responding. try again later.",
+      });
+  }
+};
 
 const filterAllSpecies = async (req, res) => {
-    let {
-        name,
-        planet,
-        firstMentioned,
-        firstAppearance,
-        lastAppearance,
-        bio,
-        biologicalType
-    } = req.query;
+  let {
+    name,
+    planet,
+    firstMentioned,
+    firstAppearance,
+    lastAppearance,
+    bio,
+    biologicalType,
+  } = req.query;
 
-    !name ? name = "" : name = name;
-    !planet ? planet = "" : planet = planet;
-    !firstMentioned ? firstMentioned = "" : firstMentioned = firstMentioned;
-    !firstAppearance ? firstAppearance = "" : firstAppearance = firstAppearance;
-    !lastAppearance ? lastAppearance = "" : lastAppearance = lastAppearance;
-    !bio ? bio = "" : bio = bio;
-    !biologicalType ? biologicalType = "" : biologicalType = biologicalType;
+  !name ? (name = "") : (name = name);
+  !planet ? (planet = "") : (planet = planet);
+  !firstMentioned ? (firstMentioned = "") : (firstMentioned = firstMentioned);
+  !firstAppearance
+    ? (firstAppearance = "")
+    : (firstAppearance = firstAppearance);
+  !lastAppearance ? (lastAppearance = "") : (lastAppearance = lastAppearance);
+  !bio ? (bio = "") : (bio = bio);
+  !biologicalType ? (biologicalType = "") : (biologicalType = biologicalType);
 
-    try {
-        await dbconnect();
-        let species = await speciesCOL.find({
-            name: { $regex: name, $options: 'i' },
-            planet: { $regex: planet, $options: 'i' },
-            firstMentioned: { $regex: firstMentioned, $options: 'i' },
-            firstAppearance: { $regex: firstAppearance, $options: 'i' },
-            lastAppearance: { $regex: lastAppearance, $options: 'i' },
-            bio: { $regex: bio, $options: 'i' },
-            biologicalType: { $regex: biologicalType, $options: 'i' }
-        });
-        let speciesArr = await species.toArray();
-        await dbclose();
+  try {
+    await dbconnect();
+    let species = await speciesCOL.find({
+      name: { $regex: name, $options: "i" },
+      planet: { $regex: planet, $options: "i" },
+      firstMentioned: { $regex: firstMentioned, $options: "i" },
+      firstAppearance: { $regex: firstAppearance, $options: "i" },
+      lastAppearance: { $regex: lastAppearance, $options: "i" },
+      bio: { $regex: bio, $options: "i" },
+      biologicalType: { $regex: biologicalType, $options: "i" },
+    });
+    let speciesArr = await species.toArray();
+    await dbclose();
 
-        if (speciesArr.length === 0) {
-            return res.status(404).json({"error": "no species found."});
-        } else {
-            return res.send(speciesArr);
-        };
-    } catch(err) {
-        console.error(`Error when doing filterAllSpecies. Error: ${err}`);
-        return res.status(500).send({"error": "it seems the TARDIS is running empty on fuel. we'll recharge over Cardiff's rift. try again later."});
+    if (speciesArr.length === 0) {
+      return res.status(404).json({ error: "no species found." });
+    } else {
+      return res.send(speciesArr);
     }
-}
+  } catch (err) {
+    console.error(`Error when doing filterAllSpecies. Error: ${err}`);
+    return res
+      .status(500)
+      .send({
+        error:
+          "it seems the TARDIS is running empty on fuel. we'll recharge over Cardiff's rift. try again later.",
+      });
+  }
+};
 
 module.exports = {
-    getAll,
-    getById,
-    updateSpecie,
-    createSpecie,
-    deleteSpecie,
-    filterAllSpecies
-}
+  getAll,
+  getById,
+  updateSpecie,
+  createSpecie,
+  deleteSpecie,
+  filterAllSpecies,
+};
