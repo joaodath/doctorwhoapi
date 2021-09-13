@@ -46,4 +46,6 @@ router.put("/species/:id", SpeciesMiddleware.checkID, SpeciesController.updateSp
 
 router.delete("/species/:id", SpeciesMiddleware.checkID, SpeciesController.deleteSpecie);
 
+router.get("/filterspecies", SpeciesController.filterAllSpecies);
+
 module.exports = router;

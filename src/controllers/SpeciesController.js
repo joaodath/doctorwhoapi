@@ -107,10 +107,55 @@ const deleteSpecie = async (req, res) => {
     }
 }
 
+const filterAllSpecies = async (req, res) => {
+    let {
+        name,
+        planet,
+        firstMentioned,
+        firstAppearance,
+        lastAppearance,
+        bio,
+        biologicalType
+    } = req.query;
+
+    !name ? name = "" : name = name;
+    !planet ? planet = "" : planet = planet;
+    !firstMentioned ? firstMentioned = "" : firstMentioned = firstMentioned;
+    !firstAppearance ? firstAppearance = "" : firstAppearance = firstAppearance;
+    !lastAppearance ? lastAppearance = "" : lastAppearance = lastAppearance;
+    !bio ? bio = "" : bio = bio;
+    !biologicalType ? biologicalType = "" : biologicalType = biologicalType;
+
+    try {
+        await dbconnect();
+        let species = await speciesCOL.find({
+            name: { $regex: name, $options: 'i' },
+            planet: { $regex: planet, $options: 'i' },
+            firstMentioned: { $regex: firstMentioned, $options: 'i' },
+            firstAppearance: { $regex: firstAppearance, $options: 'i' },
+            lastAppearance: { $regex: lastAppearance, $options: 'i' },
+            bio: { $regex: bio, $options: 'i' },
+            biologicalType: { $regex: biologicalType, $options: 'i' }
+        });
+        let speciesArr = await species.toArray();
+        await dbclose();
+
+        if (speciesArr.length === 0) {
+            return res.status(404).json({"error": "no species found."});
+        } else {
+            return res.send(speciesArr);
+        };
+    } catch(err) {
+        console.error(`Error when doing filterAllSpecies. Error: ${err}`);
+        return res.status(500).send({"error": "it seems the TARDIS is running empty on fuel. we'll recharge over Cardiff's rift. try again later."});
+    }
+}
+
 module.exports = {
     getAll,
     getById,
     updateSpecie,
     createSpecie,
-    deleteSpecie
+    deleteSpecie,
+    filterAllSpecies
 }
