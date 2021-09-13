@@ -104,10 +104,69 @@ const deleteCharacter = async (req, res) => {
     }
 }
 
+const filterAllCharacters = async (req, res) => {
+    let {name,
+    regenerationCount,
+    species,
+    bio,
+    birthDate,
+    deathDate,
+    spouse,
+    firstMentioned,
+    firstAppearance,
+    lastAppearance,
+    allAppearances,
+    actorOrActress
+    } = req.query;
+
+    !name ? name = "" : name = name;
+    !regenerationCount ? regenerationCount = "" : regenerationCount = regenerationCount;
+    !species ? species = "" : species = species;
+    !bio ? bio = "" : bio = bio;
+    !birthDate ? birthDate = "" : birthDate = birthDate;
+    !deathDate ? deathDate = "" : deathDate = deathDate;
+    !spouse ? spouse = "" : spouse = spouse;
+    !firstMentioned ? firstMentioned = "" : firstMentioned = firstMentioned;
+    !firstAppearance ? firstAppearance = "" : firstAppearance = firstAppearance;
+    !lastAppearance ? lastAppearance = "" : lastAppearance = lastAppearance;
+    !allAppearances ? allAppearances = "" : allAppearances = allAppearances;
+    !actorOrActress ? actorOrActress = "" : actorOrActress = actorOrActress;
+
+    try {
+        await dbconnect();
+        let characters = await charactersCOL.find({
+            name: { $regex: name, $options: 'i' },
+            regenerationCount: { $regex: regenerationCount, $options: 'i' },
+            species: { $regex: species, $options: 'i' },
+            bio: { $regex: bio, $options: 'i' },
+            birthDate: { $regex: birthDate, $options: 'i' },
+            deathDate: { $regex: deathDate, $options: 'i' },
+            spouse: { $regex: spouse, $options: 'i' },
+            firstMentioned: { $regex: firstMentioned, $options: 'i' },
+            firstAppearance: { $regex: firstAppearance, $options: 'i' },
+            lastAppearance: { $regex: lastAppearance, $options: 'i' },
+            allAppearances: { $regex: allAppearances, $options: 'i' },
+            actorOrActress: { $regex: actorOrActress, $options: 'i' }
+        });
+        let charactersArr = await characters.toArray();
+        await dbclose();
+
+        if (charactersArr.length === 0) {
+            return res.status(404).json({"error": "no characters found."});
+        } else {
+            return res.send(charactersArr);
+        };
+    } catch(err) {
+        console.error(`Error when doing filterAllCharacters. Error: ${err}`);
+        return res.status(500).send({"error": "it seems the TARDIS is running empty on fuel. we'll recharge over Cardiff's rift. try again later."});
+    }
+}
+
 module.exports = {
     getAll,
     getById,
     updateCharacter,
     createCharacter,
-    deleteCharacter
+    deleteCharacter,
+    filterAllCharacters
 }

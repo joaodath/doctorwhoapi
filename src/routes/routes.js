@@ -20,6 +20,8 @@ router.put("/characters/:id", CharacterMiddleware.checkID, CharacterController.u
 
 router.delete("/characters/:id", CharacterMiddleware.checkID, CharacterController.deleteCharacter)
 
+router.get("/filtercharacters", CharacterController.filterAllCharacters);
+
 //episodes routes
 router.get("/episodes", EpisodesController.getAll)
 
