@@ -65,6 +65,12 @@ inside a different collection.
 You could also create a JavaScript to fetch everything and then import it. 
 **_That's on my to-do list._**
 
+As the final step, use the file `.env.example` to create your own `.env` file.
+This file is required to create the Environment Variables. 
+
+> Note: If you're deploying to Heroku, you can set the Environment Variables 
+> inside Heroku, no need to upload adisco `.env` file.
+
 ## Acknowledgments
 
 I'd like to first give a shout out to the incredible minds at work on
