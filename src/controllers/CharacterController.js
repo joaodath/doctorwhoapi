@@ -99,13 +99,11 @@ const updateCharacter = async (req, res) => {
 
 const createCharacter = async (req, res) => {
   const characterToCreate = res.locals.character;
-  console.log(
-    `res.locals.character in createCharacter: ${res.locals.character}`
-  );
+
   try {
     await dbconnect();
 
-    result = await charactersCOL.insertOne(characterToCreate);
+    const result = await charactersCOL.insertOne(characterToCreate);
     let characterCreated = await charactersCOL.findOne({
       _id: ObjectId(result.insertedId),
     });
@@ -116,7 +114,7 @@ const createCharacter = async (req, res) => {
       ? res.status(201).json(characterCreated)
       : res
           .status(500)
-          .json({ error: "the data core is overheated. try again later." });
+          .json({ "error": "the data core is overheated. try again later." });
   } catch (err) {
     console.error(`Error occured when trying createCharacter.
         Error: ${err}`);
@@ -125,6 +123,55 @@ const createCharacter = async (req, res) => {
       .json({
         error: "the TARDIS data core is not responding. try again later.",
       });
+  }
+};
+
+const createMany = async (req, res) => {
+  const charactersToCreate = req.body;
+
+  let result;
+
+  try {
+    await dbconnect();
+    let result = await charactersCOL.insertMany(charactersToCreate);
+    await dbclose();
+  
+    let ids = result.insertedIds;
+
+    if (result.acknowledged) {
+      console.log(`${result.insertedCount} documents were inserted.`);
+      for (let id of Object.values(ids)) {
+          console.log(`Inserted a document with id ${id}`);
+      }
+      return res.status(201).json({"message": `${result.insertedCount} documents were inserted.`, ids});
+    } else {
+      return res.status(500).json({"error": "the data core is overheated. try again later."});
+    }
+    
+} catch(err) {
+  if (result.acknowledged) {
+  console.log(`A MongoBulkWriteException occurred, but there are successfully processed documents.`);
+  let ids = err.result.result.insertedIds;
+  for (let id of Object.values(ids)) {
+    console.log(`Processed a document with id ${id._id}`);
+  }
+  console.log(`Number of documents inserted: ${err.result.result.nInserted}`);
+  console.log(`Number of documents skipped: ${err.result.result.nSkipped}`);
+  console.log(`Error when trying createManyCharacters. Error: ${err}`)
+  return res
+      .status(500)
+      .json({
+        "error": `the TARDIS data core is not responding. try again later.`,
+        "log1": `Number of documents inserted: ${err.result.result.nInserted}`,
+        "log2": `Number of documents skipped: ${err.result.result.nSkipped}`,
+      });
+  } else {
+    console.log(`Error when trying createManyCharacters. Error: ${err}`);
+    return res
+      .status(500)
+      .json({
+        "error": `the TARDIS data core is not responding. try again later.`,});
+    }
   }
 };
 
@@ -155,7 +202,7 @@ const deleteCharacter = async (req, res) => {
 };
 
 const filterAllCharacters = async (req, res) => {
-  let {
+  var {
     name,
     regenerationCount,
     species,
@@ -170,6 +217,7 @@ const filterAllCharacters = async (req, res) => {
     actorOrActress,
   } = req.query;
 
+  
   !name ? (name = "") : (name = name);
   !regenerationCount
     ? (regenerationCount = "")
@@ -186,6 +234,58 @@ const filterAllCharacters = async (req, res) => {
   !lastAppearance ? (lastAppearance = "") : (lastAppearance = lastAppearance);
   !allAppearances ? (allAppearances = "") : (allAppearances = allAppearances);
   !actorOrActress ? (actorOrActress = "") : (actorOrActress = actorOrActress);
+
+  // if (!name) {
+  //   name = "";
+  // }
+  // if (!regenerationCount) {
+  //   regenerationCount = "";
+  // }
+  // if (!species) {
+  //   species = "";
+  // }
+  // if (!bio) {
+  //   bio = "";
+  // }
+  // if (!birthDate) {
+  //   birthDate = "";
+  // }
+  // if (!deathDate) {
+  //   deathDate = "";
+  // }
+  // if (!spouse) {
+  //   spouse = "";
+  // }
+  // if (!firstMentioned) {
+  //   firstMentioned = "";
+  // }
+  // if (!firstAppearance) {
+  //   firstAppearance = "";
+  // }
+  // if (!lastAppearance) {
+  //   lastAppearance = "";
+  // }
+  // if (!allAppearances) {
+  //   allAppearances = "";
+  // }
+  // if (!actorOrActress) {
+  //   actorOrActress = "";
+  // }
+  
+  console.log(`
+    name: ${name}, 
+    regenerationCount: ${regenerationCount},
+    species: ${species},
+    bio: ${bio},
+    birthDate: ${birthDate},
+    deathDate: ${deathDate},
+    spouse: ${spouse},
+    firstMentioned: ${firstMentioned},
+    firstAppearance: ${firstAppearance},
+    lastAppearance: ${lastAppearance},
+    allAppearances: ${allAppearances},
+    actorOrActress: ${actorOrActress}
+  `)
 
   try {
     await dbconnect();
@@ -205,6 +305,11 @@ const filterAllCharacters = async (req, res) => {
     });
     let charactersArr = await characters.toArray();
     await dbclose();
+
+    console.log(`
+    characters: ${characters}
+    charactersArr: ${charactersArr}`);
+    //return res.send(characters);
 
     if (charactersArr.length === 0) {
       return res.status(404).json({ error: "no characters found." });
@@ -229,4 +334,5 @@ module.exports = {
   createCharacter,
   deleteCharacter,
   filterAllCharacters,
+  createMany
 };

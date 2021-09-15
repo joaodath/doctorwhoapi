@@ -25,6 +25,10 @@ router.post(
   CharacterController.createCharacter
 );
 
+router.post(
+  "/manycharacters", CharacterController.createMany
+);
+
 router.put(
   "/characters/:id",
   CharacterMiddleware.checkID,
