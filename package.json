@@ -2,6 +2,10 @@
   "name": "doctorwhoapi",
   "version": "1.0.0",
   "description": "A simple NodeJS + Express.js RESTful API serving data about Doctor Who.",
+  "engines": {
+    "node": "14.x",
+    "npm": "7.22.x"
+  },
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
