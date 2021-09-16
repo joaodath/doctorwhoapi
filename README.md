@@ -6,6 +6,10 @@
 
 A simple NodeJS + Express.js RESTful API serving data about Doctor Who.
 
+API Version: 1.0
+
+OpenAPI Version: 3.1.0
+
 ## Intro
 
 Have you ever felt the urging need to fetch data about Doctor Who? Have you
@@ -23,9 +27,230 @@ there is to know.
 The Doctor Who API (unofficial) exists to serve the single purpose of fixing
 the urges to fetch data about Doctor Who.
 
-## How to get started
+## How to get started:
 
-Soon I'll share the secret.
+There are five HTTP verbs availables: 
+- GET (ALL) 
+- GET (By ID)
+- PUT
+- POST
+- DELETE
+
+And 3 topics (CRUD):
+- Characters
+- Episodes
+- Species
+
+The endpoints are the following for `Characters`:
+
+```
+GET All Characters
+https://doctorwhoapi.herokuapp.com/characters
+```
+
+```
+GET Characters By ID
+https://doctorwhoapi.herokuapp.com/characters/<id>
+```
+
+```
+GET Filter Characters By fields
+https://doctorwhoapi.herokuapp.com/characters?fieldName=fieldValue&field2=value2
+
+Fields Available:
+- name
+- regenerationCount
+- species
+- bio
+- birthDate
+- deathDate
+- spouse
+- firstMentioned
+- firstAppearance
+- lastAppearance
+- allAppearances
+- actorOrActress
+```
+
+```
+PUT Characters
+https://doctorwhoapi.herokuapp.com/characters
+
+All Fields MUST be filled:
+{
+    "name": "String",
+    "regenerationCount": "Integer",
+    "species":"String",
+    "bio": "String",
+    "birthDate": "Integer/String",
+    "deathDate": "Integer/String",
+    "spouse": "String",
+    "firstMentioned": "String",
+    "firstAppearance": "String",
+    "lastAppearance": "String",
+    "allAppearances": "[String Array]",
+    "actorOrActress": "String",
+    "tardisDataCoreURI": "String",
+    "imgURI": "String"   
+}
+```
+
+```
+POST Characters
+https://doctorwhoapi.herokuapp.com/characters
+
+All Fields MUST be filled:
+{
+    "name": "String",
+    "regenerationCount": "Integer",
+    "species":"String",
+    "bio": "String",
+    "birthDate": "Integer/String",
+    "deathDate": "Integer/String",
+    "spouse": "String",
+    "firstMentioned": "String",
+    "firstAppearance": "String",
+    "lastAppearance": "String",
+    "allAppearances": "[String Array]",
+    "actorOrActress": "String",
+    "tardisDataCoreURI": "String",
+    "imgURI": "String"   
+}
+```
+
+```
+POST Many Characters
+https://doctorwhoapi.herokuapp.com/episodes
+
+All Fields MUST be filled:
+{
+    "name": "String",
+    "regenerationCount": "Integer",
+    "species":"String",
+    "bio": "String",
+    "birthDate": "Integer/String",
+    "deathDate": "Integer/String",
+    "spouse": "String",
+    "firstMentioned": "String",
+    "firstAppearance": "String",
+    "lastAppearance": "String",
+    "allAppearances": "[String Array]",
+    "actorOrActress": "String",
+    "tardisDataCoreURI": "String",
+    "imgURI": "String"   
+}
+```
+
+```
+DELETE Characters
+https://doctorwhoapi.herokuapp.com/characters/<id>
+```
+
+The endpoints are the following for `Episodes`:
+
+```
+GET All Episodes
+https://doctorwhoapi.herokuapp.com/episodes
+```
+
+```
+GET Episodes By ID
+https://doctorwhoapi.herokuapp.com/episodes/<id>
+```
+
+```
+PUT Episodes
+https://doctorwhoapi.herokuapp.com/episodes
+
+All Fields MUST be filled:
+{
+    "name": "String",
+    "season": "Integer",
+    "number": "Integer",
+    "shorthand": "String",
+    "bio": "String",
+    "firstRelease": "String",
+    "tardisDataCoreURI": "String",
+    "imgURI": "String"   
+}
+```
+
+```
+POST Episodes
+https://doctorwhoapi.herokuapp.com/episodes
+
+All Fields MUST be filled:
+{
+    "name": "String",
+    "season": "Integer",
+    "number": "Integer",
+    "shorthand": "String",
+    "bio": "String",
+    "firstRelease": "String",
+    "tardisDataCoreURI": "String",
+    "imgURI": "String"   
+}
+```
+
+```
+DELETE Episodes
+https://doctorwhoapi.herokuapp.com/episodes/<id>
+```
+
+The endpoints are the following for `Species`:
+
+```
+GET All Species
+https://doctorwhoapi.herokuapp.com/species
+```
+
+```
+GET Species By ID
+https://doctorwhoapi.herokuapp.com/species/<id>
+```
+
+```
+PUT Species
+https://doctorwhoapi.herokuapp.com/species
+
+All Fields MUST be filled:
+{
+    "name": "String",
+    "planet": "String",
+    "firstMentioned": "String",
+    "firstAppearance": "String",
+    "lastAppearance": "String",
+    "allAppearances": "[String Array]",
+    "bio": "String",
+    "biologicalType": "String",
+    "tardisDataCoreURI": "String",
+    "imgURI": "String"   
+}
+```
+
+```
+POST Species
+https://doctorwhoapi.herokuapp.com/species
+
+All Fields MUST be filled:
+{
+    "name": "String",
+    "planet": "String",
+    "firstMentioned": "String",
+    "firstAppearance": "String",
+    "lastAppearance": "String",
+    "allAppearances": "[String Array]",
+    "bio": "String",
+    "biologicalType": "String",
+    "tardisDataCoreURI": "String",
+    "imgURI": "String"   
+}
+```
+
+```
+DELETE Species
+https://doctorwhoapi.herokuapp.com/species/<id>
+```
 
 ### Deploying on your own server
 
@@ -40,16 +265,7 @@ We use `NodeJS v14.17.6` as JavaScript runtime engine, some NPM packages that
 you may find inside the `package.json` file and MongoDB as the database. 
 _**Yes, a NoSQL database, baby.**_
 
-To start, you'll have to know which collections (you may think of collections 
-roughly as tables on SQL databases) we have. 
-To do that, use the following request:
-
-```
-GET
-url/docs/collections
-```
-
-Then, you'll have to clone each of the collections using the GET requests:
+To start, you'll have to clone each of the collections using the GET requests:
 
 ```
 GET
@@ -57,7 +273,7 @@ url/<collectionName>
 ```
 
 The result is a JSON object containing everything saved inside said collection.
-Do that for every collection listed on `url/docs/collections`.
+Do that for every collection listed on [`How To Get Started`](https://github.com/joaodath/doctorwhoapi#how-to-get-started).
 
 After that, spin up your own instance of MongoDB and import each JSON object
 inside a different collection.
