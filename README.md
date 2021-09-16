@@ -261,9 +261,11 @@ entire database. I will walk you through the process.
 #### Environment
 
 Make sure you have the right environment to support this API. 
-We use `NodeJS v14.17.6` as JavaScript runtime engine, some NPM packages that 
-you may find inside the `package.json` file and MongoDB as the database. 
-_**Yes, a NoSQL database, baby.**_
+We use `NodeJS v14.17.6` as JavaScript runtime engine, some NPM (version 7.22.0) packages that 
+you may find inside the `package.json` file and MongoDB as the database.  _**Yes, a NoSQL database, baby.**_
+
+> **Attention:** attempting to use NodeJS and NPM with versions lower than specified may return an error. You have been warned.
+
 
 To start, you'll have to clone each of the collections using the GET requests:
 
@@ -285,7 +287,7 @@ As the final step, use the file `.env.example` to create your own `.env` file.
 This file is required to create the Environment Variables. 
 
 > Note: If you're deploying to Heroku, you can set the Environment Variables 
-> inside Heroku, no need to upload adisco `.env` file.
+> inside Heroku, no need to upload a `.env` file.
 
 ## Acknowledgments
 
