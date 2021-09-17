@@ -234,43 +234,6 @@ const filterAllCharacters = async (req, res) => {
   !lastAppearance ? (lastAppearance = "") : (lastAppearance = lastAppearance);
   !allAppearances ? (allAppearances = "") : (allAppearances = allAppearances);
   !actorOrActress ? (actorOrActress = "") : (actorOrActress = actorOrActress);
-
-  // if (!name) {
-  //   name = "";
-  // }
-  // if (!regenerationCount) {
-  //   regenerationCount = "";
-  // }
-  // if (!species) {
-  //   species = "";
-  // }
-  // if (!bio) {
-  //   bio = "";
-  // }
-  // if (!birthDate) {
-  //   birthDate = "";
-  // }
-  // if (!deathDate) {
-  //   deathDate = "";
-  // }
-  // if (!spouse) {
-  //   spouse = "";
-  // }
-  // if (!firstMentioned) {
-  //   firstMentioned = "";
-  // }
-  // if (!firstAppearance) {
-  //   firstAppearance = "";
-  // }
-  // if (!lastAppearance) {
-  //   lastAppearance = "";
-  // }
-  // if (!allAppearances) {
-  //   allAppearances = "";
-  // }
-  // if (!actorOrActress) {
-  //   actorOrActress = "";
-  // }
   
   console.log(`
     name: ${name}, 
