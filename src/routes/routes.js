@@ -55,6 +55,10 @@ router.post(
   EpisodesController.createEpisode
 );
 
+router.post(
+  "/manyepisodes", EpisodesController.createMany
+);
+
 router.put(
   "/episodes/:id",
   EpisodesMiddleware.checkID,
@@ -79,6 +83,10 @@ router.post(
   SpeciesMiddleware.checkEmptyInput,
   SpeciesMiddleware.sanitizeInput,
   SpeciesController.createSpecie
+);
+
+router.post(
+  "/manyspecies", SpeciesController.createMany
 );
 
 router.put(

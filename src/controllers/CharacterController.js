@@ -252,7 +252,7 @@ const filterAllCharacters = async (req, res) => {
 
   try {
     await dbconnect();
-    let characters = await charactersCOL.find({
+    let characters = charactersCOL.find({
       name: { $regex: name, $options: "i" },
       regenerationCount: { $regex: regenerationCount, $options: "i" },
       species: { $regex: species, $options: "i" },

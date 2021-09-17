@@ -128,6 +128,55 @@ const createSpecie = async (req, res) => {
   }
 };
 
+const createMany = async (req, res) => {
+  const speciesToCreate = req.body;
+
+  let result;
+
+  try {
+    await dbconnect();
+    let result = await speciesCOL.insertMany(speciesToCreate);
+    await dbclose();
+  
+    let ids = result.insertedIds;
+
+    if (result.acknowledged) {
+      console.log(`${result.insertedCount} documents were inserted.`);
+      for (let id of Object.values(ids)) {
+          console.log(`Inserted a document with id ${id}`);
+      }
+      return res.status(201).json({"message": `${result.insertedCount} documents were inserted.`, ids});
+    } else {
+      return res.status(500).json({"error": "the data core is overheated. try again later."});
+    }
+    
+} catch(err) {
+  if (result.acknowledged) {
+  console.log(`A MongoBulkWriteException occurred, but there are successfully processed documents.`);
+  let ids = err.result.result.insertedIds;
+  for (let id of Object.values(ids)) {
+    console.log(`Processed a document with id ${id._id}`);
+  }
+  console.log(`Number of documents inserted: ${err.result.result.nInserted}`);
+  console.log(`Number of documents skipped: ${err.result.result.nSkipped}`);
+  console.log(`Error when trying createManyCharacters. Error: ${err}`)
+  return res
+      .status(500)
+      .json({
+        "error": `the TARDIS data core is not responding. try again later.`,
+        "log1": `Number of documents inserted: ${err.result.result.nInserted}`,
+        "log2": `Number of documents skipped: ${err.result.result.nSkipped}`,
+      });
+  } else {
+    console.log(`Error when trying createManyCharacters. Error: ${err}`);
+    return res
+      .status(500)
+      .json({
+        "error": `the TARDIS data core is not responding. try again later.`,});
+    }
+  }
+};
+
 const deleteSpecie = async (req, res) => {
   const { id } = req.params;
 
@@ -212,4 +261,5 @@ module.exports = {
   createSpecie,
   deleteSpecie,
   filterAllSpecies,
+  createMany
 };
