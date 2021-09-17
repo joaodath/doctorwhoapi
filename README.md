@@ -41,7 +41,7 @@ And 3 topics (CRUD):
 - Episodes
 - Species
 
-The endpoints are the following for `Characters`:
+**The endpoints are the following for `Characters`:**
 
 ```
 GET All Characters
@@ -55,7 +55,7 @@ https://doctorwhoapi.herokuapp.com/characters/<id>
 
 ```
 GET Filter Characters By fields
-https://doctorwhoapi.herokuapp.com/characters?fieldName=fieldValue&field2=value2
+https://doctorwhoapi.herokuapp.com/filtercharacters?fieldName=fieldValue&field2=value2
 
 Fields Available:
 - name
@@ -120,7 +120,7 @@ All Fields MUST be filled:
 
 ```
 POST Many Characters
-https://doctorwhoapi.herokuapp.com/episodes
+https://doctorwhoapi.herokuapp.com/manycharacters
 
 All Fields MUST be filled:
 {
@@ -146,7 +146,7 @@ DELETE Characters
 https://doctorwhoapi.herokuapp.com/characters/<id>
 ```
 
-The endpoints are the following for `Episodes`:
+**The endpoints are the following for `Episodes`:**
 
 ```
 GET All Episodes
@@ -156,6 +156,19 @@ https://doctorwhoapi.herokuapp.com/episodes
 ```
 GET Episodes By ID
 https://doctorwhoapi.herokuapp.com/episodes/<id>
+```
+
+```
+GET Filter Episodes By fields
+https://doctorwhoapi.herokuapp.com/filterepisodes?fieldName=fieldValue&field2=value2
+
+Fields Available:
+- name
+- season
+- number
+- shorthand
+- bio
+- firstRelease
 ```
 
 ```
@@ -193,11 +206,28 @@ All Fields MUST be filled:
 ```
 
 ```
+POST Many Episodes
+https://doctorwhoapi.herokuapp.com/manyepisodes
+
+All Fields MUST be filled:
+{
+    "name": "String",
+    "season": "Integer",
+    "number": "Integer",
+    "shorthand": "String",
+    "bio": "String",
+    "firstRelease": "String",
+    "tardisDataCoreURI": "String",
+    "imgURI": "String"   
+}
+```
+
+```
 DELETE Episodes
 https://doctorwhoapi.herokuapp.com/episodes/<id>
 ```
 
-The endpoints are the following for `Species`:
+**The endpoints are the following for `Species`:**
 
 ```
 GET All Species
@@ -207,6 +237,21 @@ https://doctorwhoapi.herokuapp.com/species
 ```
 GET Species By ID
 https://doctorwhoapi.herokuapp.com/species/<id>
+```
+
+```
+GET Filter Species By fields
+https://doctorwhoapi.herokuapp.com/filterspecies?fieldName=fieldValue&field2=value2
+
+Fields Available:
+- name
+- planet
+- firstMentioned
+- firstAppearance
+- lastAppearance
+- allAppearances
+- bio
+- biologicalType
 ```
 
 ```
@@ -248,6 +293,25 @@ All Fields MUST be filled:
 ```
 
 ```
+POST Many Species
+https://doctorwhoapi.herokuapp.com/manyspecies
+
+All Fields MUST be filled:
+{
+    "name": "String",
+    "planet": "String",
+    "firstMentioned": "String",
+    "firstAppearance": "String",
+    "lastAppearance": "String",
+    "allAppearances": "[String Array]",
+    "bio": "String",
+    "biologicalType": "String",
+    "tardisDataCoreURI": "String",
+    "imgURI": "String"   
+}
+```
+
+```
 DELETE Species
 https://doctorwhoapi.herokuapp.com/species/<id>
 ```
@@ -271,7 +335,7 @@ To start, you'll have to clone each of the collections using the GET requests:
 
 ```
 GET
-url/<collectionName>
+https://doctorwhoapi.herokuapp.com/<collectionName>
 ```
 
 The result is a JSON object containing everything saved inside said collection.
