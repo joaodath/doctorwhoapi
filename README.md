@@ -3,6 +3,8 @@
 [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/joaodath/doctorwhoapi)
 [![Lines of Code](https://img.shields.io/tokei/lines/github/joaodath/doctorwhoapi)](https://img.shields.io/tokei/lines/github/joaodath/doctorwhoapi)
 [![Repo Size](https://img.shields.io/github/repo-size/joaodath/doctorwhoapi)](https://img.shields.io/github/repo-size/joaodath/doctorwhoapi)
+![example workflow](https://github.com/joaodath/doctorwhoapi/actions/workflows/codeql-analysis.yml/badge.svg)
+
 
 A simple NodeJS + Express.js RESTful API serving data about Doctor Who.
 
